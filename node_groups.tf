@@ -58,9 +58,9 @@ resource "random_pet" "node_groups" {
 
     ec2_ssh_key = lookup(each.value, "key_name", local.workers_group_defaults["key_name"])
 
-    source_security_group_ids = join("-", compact(
-      lookup(each.value, "source_security_group_ids", local.workers_group_defaults["source_security_group_id"]
-    )))
+    # source_security_group_ids = join("-", compact(
+    #   lookup(each.value, "source_security_group_ids", local.workers_group_defaults["source_security_group_id"]
+    # )))
 
     node_group_name = join("-", [var.cluster_name, each.value["name"]])
   }
@@ -90,7 +90,7 @@ resource "aws_eks_node_group" "workers" {
   # This sometimes breaks idempotency as described in https://github.com/terraform-providers/terraform-provider-aws/issues/11063
   remote_access {
     ec2_ssh_key               = lookup(each.value, "key_name", "") != "" ? each.value["key_name"] : null
-    source_security_group_ids = lookup(each.value, "key_name", "") != "" ? lookup(each.value, "source_security_group_ids", []) : null
+    source_security_group_ids = lookup(each.value, "source_security_group_ids", "") != "" ? lookup(each.value, "source_security_group_ids", []) : null
   }
 
   version = aws_eks_cluster.this[0].version
