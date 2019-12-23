@@ -83,7 +83,8 @@ resource "aws_eks_node_group" "workers" {
 
   ami_type        = lookup(each.value, "ami_type", null)
   disk_size       = lookup(each.value, "root_volume_size", null)
-  instance_types  = lookup(each.value, "instance_types", null)
+  instance_types  = ["m5a.large", "m5.large"]
+  # lookup(each.value, "instance_types", null)
   labels          = lookup(each.value, "node_group_k8s_labels", null)
   release_version = lookup(each.value, "ami_release_version", null)
 
