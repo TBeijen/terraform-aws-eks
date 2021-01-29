@@ -256,8 +256,10 @@ resource "aws_launch_template" "workers_launch_template" {
     )
     security_groups = flatten([
       local.worker_security_group_id,
+      [],
+      null,
+      local.cluster_primary_security_group_id != "" ? [local.cluster_primary_security_group_id] : [],
       var.worker_additional_security_group_ids,
-      aws_eks_cluster.this[0].vpc_config[0].cluster_security_group_id,
       lookup(
         var.worker_groups_launch_template[count.index],
         "additional_security_group_ids",
